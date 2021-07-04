@@ -51,7 +51,6 @@ IndentRequires: true
 IndentWrappedFunctionNames: true
 IndentWidth: 4
 IncludeBlocks: Regroup
-InsertTrailingCommas: Wrapped
 JavaScriptQuotes: Single
 KeepEmptyLinesAtTheStartOfBlocks: true
 MaxEmptyLinesToKeep: 2

@@ -2,6 +2,6 @@
 
 #include <iostream>
 
-void hello() {
+void aegis::hello() {
     std::cout << "Hello, World!" << std::endl;
 }

@@ -1,6 +1,9 @@
 #ifndef LIBAEGIS_AEGIS_H
 #define LIBAEGIS_AEGIS_H
 
-void hello();
+
+namespace aegis {
+    void  hello();
+}
 
 #endif//LIBAEGIS_AEGIS_H

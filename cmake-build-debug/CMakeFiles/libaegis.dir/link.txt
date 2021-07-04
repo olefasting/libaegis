@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblibaegis.a CMakeFiles/libaegis.dir/src/aegis.cpp.o
+/usr/bin/ranlib liblibaegis.a

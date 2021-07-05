@@ -16,12 +16,6 @@ namespace aegis {
 
         [[nodiscard]] const char* what() const noexcept override;
     };
-
-#define EXCEPTION_OPENCV 1
-
-    struct OpenCVException : public Exception {
-        explicit OpenCVException(std::string _message);
-    };
 }
 
 #endif    // LIBAEGIS_EXCEPTION_H

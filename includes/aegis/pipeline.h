@@ -5,22 +5,24 @@
 #ifndef LIBAEGIS_PIPELINE_H
 #define LIBAEGIS_PIPELINE_H
 
-#include "context.h"
-
 namespace aegis {
-    typedef std::function<void(Context&)> Handler;
+    struct Context {
+        cv::Mat data;
+
+        explicit Context(cv::InputArray _data = cv::noArray());
+    };
+
+    typedef std::function<Context(const Context&)> Reducer;
 
     class Pipeline {
-        std::vector<Handler> handlers{};
+        std::vector<Reducer> reducers{};
 
     public:
-        Pipeline() = default;
+        Pipeline(std::initializer_list<Reducer> _reducers = {});
 
-        void use(const Handler& handler);
+        [[nodiscard]] Context process(const Context& input) const;
 
-        void process(Context& context);
-        void process(cv::InputArray input);
-        void process(cv::InputArray input, cv::OutputArray output);
+        [[nodiscard]] Reducer to_reducer() const;
     };
 }    // namespace aegis
 

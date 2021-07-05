@@ -12,6 +12,4 @@ namespace aegis {
     const char* Exception::what() const noexcept {
         return message.c_str();
     }
-
-    OpenCVException::OpenCVException(std::string _message) : Exception(EXCEPTION_OPENCV, std::move(_message)) {}
 }

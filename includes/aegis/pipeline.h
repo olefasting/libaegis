@@ -6,24 +6,21 @@
 #define LIBAEGIS_PIPELINE_H
 
 namespace aegis {
-    struct Context {
-        cv::Mat data;
+    typedef std::function<void(cv::InputArray, cv::OutputArray)> Reducer;
 
-        explicit Context(cv::InputArray _data = cv::noArray());
-    };
-
-    typedef std::function<Context(const Context&)> Reducer;
-
-    class Pipeline {
+    struct Pipeline {
         std::vector<Reducer> reducers{};
 
-    public:
         Pipeline(std::initializer_list<Reducer> _reducers = {});
 
-        [[nodiscard]] Context process(const Context& input) const;
+        void process(cv::InputArray input, cv::OutputArray output) const;
 
         [[nodiscard]] Reducer to_reducer() const;
     };
+
+    void process(const Pipeline& pipeline, cv::InputArray input, cv::OutputArray output);
+
+    Reducer to_reducer(const Pipeline& pipeline);
 }    // namespace aegis
 
 #endif    // LIBAEGIS_PIPELINE_H

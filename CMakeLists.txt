@@ -15,7 +15,7 @@ find_package(OpenCV REQUIRED)
 
 add_subdirectory(vendor/crossguid)
 
-add_library(libaegis src/pipeline.cpp src/uuid.cpp src/exception.cpp)
+add_library(libaegis src/pipeline.cpp)
 
 target_link_libraries(libaegis PUBLIC ${OpenCV_LIBS})
 target_link_libraries(libaegis PRIVATE crossguid)

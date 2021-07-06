@@ -7,21 +7,30 @@
 #include "aegis/pipeline.h"
 
 namespace aegis {
-    Context::Context(cv::InputArray _data) : data(_data.getMat()) {}
-
     Pipeline::Pipeline(std::initializer_list<Reducer> _reducers) : reducers(_reducers) {}
 
-    Context Pipeline::process(const Context& input) const {
-        Context current = input;
-        for (auto& handler : reducers) {
-            current = handler(current);
+    void Pipeline::process(cv::InputArray input, cv::OutputArray output) const {
+        cv::Mat _input, _output;
+        input.copyTo(_input);
+        for (const auto& reducer : reducers) {
+            _output.deallocate();
+            reducer(_input, _output);
+            _output.copyTo(_input);
         }
-        return current;
+        _output.copyTo(output);
     }
 
     Reducer Pipeline::to_reducer() const {
-        return [this](const Context& input) -> Context {
-          return this->process(input);
+        return [this](cv::InputArray input, cv::OutputArray output) {
+            this->process(input, output);
         };
+    }
+
+    void process(const Pipeline& pipeline, cv::InputArray input, cv::OutputArray output) {
+        return pipeline.process(input, output);
+    }
+
+    Reducer to_reducer(const Pipeline& pipeline) {
+        return pipeline.to_reducer();
     }
 }    // namespace aegis

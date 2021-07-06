@@ -11,10 +11,7 @@
 #include <opencv2/videoio.hpp>
 #include <opencv2/objdetect.hpp>
 
-#include "exception.h"
 #include "input.h"
 #include "pipeline.h"
-#include "system_time.h"
-#include "uuid.h"
 
 #endif    // LIBAEGIS_AEGIS_H

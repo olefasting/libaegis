@@ -4,8 +4,8 @@ Language: Cpp
 Standard: c++20
 AccessModifierOffset: -4
 AlignAfterOpenBracket: Align
-AlignConsecutiveAssignments: Consecutive
-AlignConsecutiveMacros: Consecutive
+AlignConsecutiveAssignments: None
+AlignConsecutiveMacros: None
 AlignOperands: AlignAfterOperator
 AllowAllArgumentsOnNextLine: false
 AllowAllConstructorInitializersOnNextLine: false
@@ -41,7 +41,7 @@ BreakStringLiterals: true
 ColumnLimit: 140
 CompactNamespaces: false
 ContinuationIndentWidth: 8
-ConstructorInitializerAllOnOneLineOrOnePerLine: false
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
 EmptyLineBeforeAccessModifier: Always
 IndentCaseBlocks: true
 IndentCaseLabels: true
@@ -54,13 +54,13 @@ IndentWidth: 4
 IncludeBlocks: Preserve
 JavaScriptQuotes: Single
 KeepEmptyLinesAtTheStartOfBlocks: true
-MaxEmptyLinesToKeep: 2
+MaxEmptyLinesToKeep: 1
 NamespaceIndentation: All
 ObjCSpaceAfterProperty: false
 ObjCSpaceBeforeProtocolList: true
 PointerAlignment: Left
 ReflowComments: true
-SpaceAfterCStyleCast: true
+SpaceAfterCStyleCast: false
 SpaceAfterLogicalNot: false
 SpaceAfterTemplateKeyword: false
 SpaceAroundPointerQualifiers: Default

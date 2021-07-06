@@ -1,3 +1,0 @@
-[submodule "vendor/crossguid"]
-	path = vendor/crossguid
-	url = git@github.com:graeme-hill/crossguid.git

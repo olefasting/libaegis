@@ -13,12 +13,8 @@ set(CMAKE_CXX_STANDARD 20)
 
 find_package(OpenCV REQUIRED)
 
-add_subdirectory(vendor/crossguid)
-
 add_library(libaegis src/pipeline.cpp)
 
 target_link_libraries(libaegis PUBLIC ${OpenCV_LIBS})
-target_link_libraries(libaegis PRIVATE crossguid)
 
 target_include_directories(libaegis PUBLIC includes ${OpenCV_INCLUDE_DIRS})
-target_include_directories(libaegis PRIVATE vendor/crossguid/include)

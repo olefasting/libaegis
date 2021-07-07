@@ -15,7 +15,28 @@ namespace aegis {
         KEY_Q = 113,
     };
 
-    typedef std::function<void(cv::InputArray, cv::OutputArray)> Reducer;
+    typedef cv::Mat Matrix;
+    //typedef cv::UMat Image; Currently not working properly (deallocate causes exception
+    typedef cv::InputArray InputArray;
+    typedef cv::OutputArray OutputArray;
+
+    // TODO: Implement grab and retrieve
+    class VideoSource {
+        cv::VideoCapture _capture;
+
+    public:
+        explicit VideoSource(int device_index);
+
+        explicit VideoSource(const std::string& file_path);
+
+        VideoSource& operator>> (Matrix& matrix);
+
+        // VideoSource& operator>> (Image& image);
+
+        bool read(OutputArray output);
+    };
+
+    typedef std::function<void(InputArray, OutputArray)> Reducer;
 
     Reducer create_passthrough_reducer();
 
@@ -41,20 +62,24 @@ namespace aegis {
     Reducer create_erode_reducer(const int* dilate_width, const int* dilate_height);
 
     class Pipeline {
-        std::string name;
-        cv::VideoCapture& source;
-        std::vector<Reducer> reducers;
+        std::string _name;
+        VideoSource& _source;
+        std::vector<Reducer> _reducers;
 
     public:
-        explicit Pipeline(std::string _name, cv::VideoCapture& _source, std::initializer_list<Reducer> _reducers = {});
+        explicit Pipeline(std::string name, VideoSource& source, std::initializer_list<Reducer> reducers = {});
 
-        explicit Pipeline(cv::VideoCapture& _source, std::initializer_list<Reducer> _reducers = {});
+        explicit Pipeline(VideoSource& source, std::initializer_list<Reducer> reducers = {});
+
+        Pipeline& operator>> (Matrix& matrix);
+
+        // Pipeline& operator>> (Image& image);
 
         std::string get_name();
 
-        void set_name(std::string _name);
+        void set_name(std::string name);
 
-        void next_frame(cv::OutputArray output);
+        bool read(OutputArray output);
     };
 }// namespace aegis
 

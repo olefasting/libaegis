@@ -9,54 +9,48 @@
 #include <opencv2/videoio.hpp>
 
 namespace aegis {
-#define UNNAMED_GROUP "Unnamed Group"
 #define UNNAMED_PIPELINE "Unnamed Pipeline"
 
     typedef std::function<void(cv::InputArray, cv::OutputArray)> Reducer;
 
-    Reducer create_copy_reducer();
+    Reducer create_passthrough_reducer();
+
     Reducer create_color_convert_reducer(int code);
+
     Reducer create_color_convert_reducer(const int* code);
+
     Reducer create_gaussian_blur_reducer(int gauss_width, int gauss_height, int gauss_sigma_x, int gauss_sigma_y);
+
     Reducer create_gaussian_blur_reducer(const int* gauss_width, const int* gauss_height, const int* gauss_sigma_x,
                                          const int* gauss_sigma_y);
+
     Reducer create_canny_reducer(int canny_threshold_1, int canny_threshold_2);
+
     Reducer create_canny_reducer(const int* canny_threshold_1, const int* canny_threshold_2);
+
     Reducer create_dilate_reducer(int dilate_width, int dilate_height);
+
     Reducer create_dilate_reducer(const int* dilate_width, const int* dilate_height);
+
     Reducer create_erode_reducer(int dilate_width, int dilate_height);
+
     Reducer create_erode_reducer(const int* dilate_width, const int* dilate_height);
-
-    class Group {
-        std::string name;
-        std::vector<Reducer> reducers{};
-
-    public:
-        explicit Group(std::string _name = UNNAMED_GROUP, std::initializer_list<Reducer> _reducers = {});
-
-        void process(cv::InputArray input, cv::OutputArray output) const;
-
-        [[nodiscard]] Reducer get_reducer() const;
-
-        [[nodiscard]] std::string get_name() const;
-        void set_name(std::string _name);
-    };
 
     class Pipeline {
         std::string name;
-        cv::VideoCapture* source;
-        Reducer reducer;
+        cv::VideoCapture& source;
+        std::vector<Reducer> reducers;
 
     public:
-        explicit Pipeline(std::string _name, cv::VideoCapture* _source, Reducer _reducer);
-        explicit Pipeline(cv::VideoCapture* _source, Reducer _reducer);
-        explicit Pipeline(std::string _name, cv::VideoCapture* _source, const Group& group);
-        explicit Pipeline(cv::VideoCapture* _source, const Group& group);
+        explicit Pipeline(std::string _name, cv::VideoCapture& _source, std::initializer_list<Reducer> _reducers = {});
+
+        explicit Pipeline(cv::VideoCapture& _source, std::initializer_list<Reducer> _reducers = {});
 
         std::string get_name();
+
         void set_name(std::string _name);
 
-        void get_frame(cv::OutputArray output);
+        void next_frame(cv::OutputArray output);
     };
 }    // namespace aegis
 

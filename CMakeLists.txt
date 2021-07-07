@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 find_package(OpenCV REQUIRED)
 
-add_library(libaegis src/pipeline.cpp)
+add_library(libaegis src/aegis.cppm)
 
 target_link_libraries(libaegis PUBLIC ${OpenCV_LIBS})
 

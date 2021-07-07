@@ -20,20 +20,27 @@ namespace aegis {
     typedef cv::InputArray InputArray;
     typedef cv::OutputArray OutputArray;
 
-    // TODO: Implement grab and retrieve
     class VideoSource {
+    public:
+        virtual VideoSource& operator>>(Matrix& matrix) = 0;
+
+        virtual bool read(OutputArray output) = 0;
+    };
+
+    // TODO: Implement grab and retrieve
+    class CaptureSource : public VideoSource {
         cv::VideoCapture _capture;
 
     public:
-        explicit VideoSource(int device_index);
+        explicit CaptureSource(int device_index);
 
-        explicit VideoSource(const std::string& file_path);
+        explicit CaptureSource(const std::string& file_path);
 
-        VideoSource& operator>> (Matrix& matrix);
+        CaptureSource& operator>>(Matrix& matrix) override;
 
         // VideoSource& operator>> (Image& image);
 
-        bool read(OutputArray output);
+        bool read(OutputArray output) override;
     };
 
     typedef std::function<void(InputArray, OutputArray)> Reducer;
@@ -61,25 +68,18 @@ namespace aegis {
 
     Reducer create_erode_reducer(const int* dilate_width, const int* dilate_height);
 
-    class Pipeline {
-        std::string _name;
+    class Pipeline : public VideoSource {
         VideoSource& _source;
         std::vector<Reducer> _reducers;
 
     public:
-        explicit Pipeline(std::string name, VideoSource& source, std::initializer_list<Reducer> reducers = {});
+        explicit Pipeline(CaptureSource& source, std::initializer_list<Reducer> reducers = {});
 
-        explicit Pipeline(VideoSource& source, std::initializer_list<Reducer> reducers = {});
-
-        Pipeline& operator>> (Matrix& matrix);
+        Pipeline& operator>>(Matrix& matrix) override;
 
         // Pipeline& operator>> (Image& image);
 
-        std::string get_name();
-
-        void set_name(std::string name);
-
-        bool read(OutputArray output);
+        bool read(OutputArray output) override;
     };
 }// namespace aegis
 

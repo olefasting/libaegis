@@ -14,13 +14,13 @@
 #define UNNAMED_PIPELINE "Unnamed Pipeline"
 
 namespace aegis {
-    VideoSource::VideoSource(int device_index) : _capture(cv::VideoCapture(device_index)) {
+    CaptureSource::CaptureSource(int device_index) : _capture(cv::VideoCapture(device_index)) {
     }
 
-    VideoSource::VideoSource(const std::string& file_path) : _capture(cv::VideoCapture(file_path)) {
+    CaptureSource::CaptureSource(const std::string& file_path) : _capture(cv::VideoCapture(file_path)) {
     }
 
-    VideoSource& VideoSource::operator>>(Matrix& matrix) {
+    CaptureSource& CaptureSource::operator>>(Matrix& matrix) {
         read(matrix);
         return *this;
     }
@@ -30,7 +30,7 @@ namespace aegis {
 //        return *this;
 //    }
 
-    bool VideoSource::read(OutputArray output) {
+    bool CaptureSource::read(OutputArray output) {
         return _capture.read(output);
     }
 
@@ -105,12 +105,8 @@ namespace aegis {
         };
     }
 
-    Pipeline::Pipeline(std::string name, VideoSource& source, std::initializer_list<Reducer> reducers)
-        : _name(std::move(name)), _source(source), _reducers(reducers) {
-    }
-
-    Pipeline::Pipeline(VideoSource& source, std::initializer_list<Reducer> reducers)
-        : Pipeline(UNNAMED_PIPELINE, source, reducers) {
+    Pipeline::Pipeline(CaptureSource& source, std::initializer_list<Reducer> reducers)
+        : _source(source), _reducers(reducers) {
     }
 
     Pipeline& Pipeline::operator>>(Matrix& matrix) {
@@ -122,14 +118,6 @@ namespace aegis {
 //        read(image);
 //        return *this;
 //    }
-
-    std::string Pipeline::get_name() {
-        return _name;
-    }
-
-    void Pipeline::set_name(std::string name) {
-        _name = std::move(name);
-    }
 
     bool Pipeline::read(OutputArray output) {
         Matrix _input, _output;

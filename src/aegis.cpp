@@ -5,11 +5,15 @@
 #include <utility>
 #include <iostream>
 
-#include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/objdetect.hpp>
 
-#include "aegis/pipeline.h"
+#include "aegis/aegis.h"
 
 namespace aegis {
+#define UNNAMED_PIPELINE "Unnamed Pipeline"
+
     Reducer create_passthrough_reducer() {
         return [](cv::InputArray input, cv::OutputArray output) {
             input.copyTo(output);

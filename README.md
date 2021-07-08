@@ -14,12 +14,6 @@ It currently has no documentation but here is an example:
 
 using namespace aegis;
 
-Reducer create_passthrough_reducer() {
-    return [](InputArray input, OutputArray output) {
-        input.copyTo(output);
-    };
-}
-
 Reducer create_gaussian_blur_reducer(const int* width, const int* height, const int* sigma_x,const int* sigma_y) {
     return [width, height, sigma_x, sigma_y](InputArray input, OutputArray output) {
         cv::GaussianBlur(input, output, cv::Size(*width, *height),*sigma_x, *sigma_y);

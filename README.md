@@ -4,7 +4,7 @@ A library for building OpenCV pipelines from lambda functions.
 
 In early development so expect breaking changes.
 
-It currently has no documentation but here is an example (see the create reducer functions in source for examples of reducers):
+It currently has no documentation but here is an example:
 
 ```c++
 #include <opencv2/imgproc.hpp>
@@ -13,6 +13,41 @@ It currently has no documentation but here is an example (see the create reducer
 #include "aegis/aegis.h"
 
 using namespace aegis;
+
+Reducer create_passthrough_reducer() {
+    return [](InputArray input, OutputArray output) {
+        input.copyTo(output);
+    };
+}
+
+Reducer create_gaussian_blur_reducer(const int* width, const int* height,
+                                     const int* sigma_x,const int* sigma_y) {
+    return [width, height, sigma_x, sigma_y](InputArray input, OutputArray output) {
+        cv::GaussianBlur(input, output, cv::Size(*width, *height),*sigma_x, *sigma_y);
+    };
+}
+
+Reducer create_canny_reducer(const int* threshold_1, const int* threshold_2) {
+    return [threshold_1, threshold_2](InputArray input, OutputArray output) {
+        cv::Canny(input, output, *threshold_1, *threshold_2);
+    };
+}
+
+Reducer create_dilate_reducer(const int* width, const int* height) {
+    return [width, height](InputArray input, OutputArray output) {
+        auto kernel = cv::getStructuringElement(
+            cv::MORPH_RECT, cv::Size(*width, *height));
+        cv::dilate(input, output, kernel);
+    };
+}
+
+Reducer create_erode_reducer(const int* width, const int* height) {
+    return [width, height](InputArray input, OutputArray output) {
+        auto kernel = cv::getStructuringElement(
+            cv::MORPH_RECT, cv::Size(*width, *height));
+        cv::erode(input, output, kernel);
+    };
+}
 
 int main() {
     int gauss_width = 3, gauss_height = 3, gauss_sigma_x = 3, gauss_sigma_y = 0;

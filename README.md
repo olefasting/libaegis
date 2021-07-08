@@ -1,6 +1,6 @@
 # libaegis
 
-A header only library for building OpenCV pipelines from lambda functions.
+A library for building OpenCV pipelines from lambda functions.
 
 In early development so expect breaking changes.
 

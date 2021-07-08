@@ -47,13 +47,14 @@ Reducer create_erode_reducer(const int* erode_width, const int* erode_height) {
 }
 
 int main() {
+    int color_convert_code = cv::COLOR_BGR2GRAY;
     int gauss_width = 3, gauss_height = 3, gauss_sigma_x = 3, gauss_sigma_y = 0;
     int canny_threshold_1 = 25, canny_threshold_2 = 75;
     int dilate_width = 5, dilate_height = 5;
     int erode_width = 5, erode_height = 5;
     auto source = CaptureSource(0);
     auto pipeline = Pipeline(source, {
-        create_color_convert_reducer(cv::COLOR_BGR2GRAY),
+        create_color_convert_reducer(&color_convert_code),
         create_gaussian_blur_reducer(&gauss_width, &gauss_height, &gauss_sigma_x, &gauss_sigma_y),
         create_canny_reducer(&canny_threshold_1, &canny_threshold_2),
         create_dilate_reducer(&dilate_width, &dilate_height),

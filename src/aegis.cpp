@@ -46,63 +46,47 @@ namespace aegis {
         };
     }
 
-    Reducer create_color_convert_reducer(const int* code) {
-        return [code](InputArray input, OutputArray output) {
-            cv::cvtColor(input, output, *code);
+    Reducer create_gaussian_blur_reducer(const int* width, const int* height, const int* sigma_x,
+                                         const int* sigma_y) {
+        return [width, height, sigma_x, sigma_y](InputArray input, OutputArray output) {
+            cv::GaussianBlur(input, output, cv::Size(*width, *height), *sigma_x, *sigma_y);
         };
     }
 
-    Reducer create_gaussian_blur_reducer(const int* gauss_width, const int* gauss_height, const int* gauss_sigma_x,
-                                         const int* gauss_sigma_y) {
-        return [gauss_width, gauss_height, gauss_sigma_x, gauss_sigma_y](InputArray input, OutputArray output) {
-            cv::GaussianBlur(input, output, cv::Size(*gauss_width, *gauss_height), *gauss_sigma_x, *gauss_sigma_y);
+    Reducer create_gaussian_blur_reducer(int width, int height, int sigma_x, int sigma_y) {
+        return create_gaussian_blur_reducer(&width, &height, &sigma_x, &sigma_y);
+    }
+
+    Reducer create_canny_reducer(const int* threshold_1, const int* threshold_2) {
+        return [threshold_1, threshold_2](InputArray input, OutputArray output) {
+            cv::Canny(input, output, *threshold_1, *threshold_2);
         };
     }
 
-    Reducer create_gaussian_blur_reducer(int gauss_width, int gauss_height, int gauss_sigma_x, int gauss_sigma_y) {
-        return [gauss_width, gauss_height, gauss_sigma_x, gauss_sigma_y](InputArray input, OutputArray output) {
-            cv::GaussianBlur(input, output, cv::Size(gauss_width, gauss_height), gauss_sigma_x, gauss_sigma_y);
-        };
+    Reducer create_canny_reducer(int threshold_1, int threshold_2) {
+        return create_canny_reducer(&threshold_1, &threshold_2);
     }
 
-    Reducer create_canny_reducer(int canny_threshold_1, int canny_threshold_2) {
-        return [canny_threshold_1, canny_threshold_2](InputArray input, OutputArray output) {
-            cv::Canny(input, output, canny_threshold_1, canny_threshold_2);
-        };
-    }
-
-    Reducer create_canny_reducer(const int* canny_threshold_1, const int* canny_threshold_2) {
-        return [canny_threshold_1, canny_threshold_2](InputArray input, OutputArray output) {
-            cv::Canny(input, output, *canny_threshold_1, *canny_threshold_2);
-        };
-    }
-
-    Reducer create_dilate_reducer(int dilate_width, int dilate_height) {
-        return [dilate_width, dilate_height](InputArray input, OutputArray output) {
-            auto kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(dilate_width, dilate_height));
+    Reducer create_dilate_reducer(const int* width, const int* height) {
+        return [width, height](InputArray input, OutputArray output) {
+            auto kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(*width, *height));
             cv::dilate(input, output, kernel);
         };
     }
 
-    Reducer create_dilate_reducer(const int* dilate_width, const int* dilate_height) {
-        return [dilate_width, dilate_height](InputArray input, OutputArray output) {
-            auto kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(*dilate_width, *dilate_height));
-            cv::dilate(input, output, kernel);
-        };
+    Reducer create_dilate_reducer(int width, int height) {
+        return create_dilate_reducer(&width, &height);
     }
 
-    Reducer create_erode_reducer(int erode_width, int erode_height) {
-        return [erode_width, erode_height](InputArray input, OutputArray output) {
-            auto kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(erode_width, erode_height));
+    Reducer create_erode_reducer(const int* width, const int* height) {
+        return [width, height](InputArray input, OutputArray output) {
+            auto kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(*width, *height));
             cv::erode(input, output, kernel);
         };
     }
 
-    Reducer create_erode_reducer(const int* erode_width, const int* erode_height) {
-        return [erode_width, erode_height](InputArray input, OutputArray output) {
-            auto kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(*erode_width, *erode_height));
-            cv::erode(input, output, kernel);
-        };
+    Reducer create_erode_reducer(int width, int height) {
+        return create_erode_reducer(&width, &height);
     }
 
     Pipeline::Pipeline(CaptureSource& source, std::initializer_list<Reducer> reducers)

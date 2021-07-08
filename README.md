@@ -1,10 +1,10 @@
 # libaegis
 
-A library for building OpenCV pipelines from lambda functions.
+A header only library for building OpenCV pipelines from lambda functions.
 
 In early development so expect breaking changes.
 
-It currently has no documentation but here is an example:
+It currently has no documentation but here is an example (see the create reducer functions in source for examples of reducers):
 
 ```c++
 #include <opencv2/imgproc.hpp>
@@ -14,47 +14,14 @@ It currently has no documentation but here is an example:
 
 using namespace aegis;
 
-Reducer create_color_convert_reducer(const int* code) {
-    return [code](InputArray input, OutputArray output) {
-        cv::cvtColor(input, output, *code);
-    };
-}
-
-Reducer create_gaussian_blur_reducer(const int* gauss_width, const int* gauss_height, const int* gauss_sigma_x, const int* gauss_sigma_y) {
-    return [gauss_width, gauss_height, gauss_sigma_x, gauss_sigma_y](InputArray input, OutputArray output) {
-        cv::GaussianBlur(input, output, cv::Size(*gauss_width, *gauss_height), *gauss_sigma_x, *gauss_sigma_y);
-    };
-}
-
-Reducer create_canny_reducer(const int* canny_threshold_1, const int* canny_threshold_2) {
-    return [canny_threshold_1, canny_threshold_2](InputArray input, OutputArray output) {
-        cv::Canny(input, output, *canny_threshold_1, *canny_threshold_2);
-    };
-}
-
-Reducer create_dilate_reducer(const int* dilate_width, const int* dilate_height) {
-    return [dilate_width, dilate_height](InputArray input, OutputArray output) {
-        auto kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(*dilate_width, *dilate_height));
-        cv::dilate(input, output, kernel);
-    };
-}
-
-Reducer create_erode_reducer(const int* erode_width, const int* erode_height) {
-    return [erode_width, erode_height](InputArray input, OutputArray output) {
-        auto kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(*erode_width, *erode_height));
-        cv::erode(input, output, kernel);
-    };
-}
-
 int main() {
-    int color_convert_code = cv::COLOR_BGR2GRAY;
     int gauss_width = 3, gauss_height = 3, gauss_sigma_x = 3, gauss_sigma_y = 0;
     int canny_threshold_1 = 25, canny_threshold_2 = 75;
     int dilate_width = 5, dilate_height = 5;
     int erode_width = 5, erode_height = 5;
     auto source = CaptureSource(0);
     auto pipeline = Pipeline(source, {
-        create_color_convert_reducer(&color_convert_code),
+        create_color_convert_reducer(cv::COLOR_BGR2GRAY),
         create_gaussian_blur_reducer(&gauss_width, &gauss_height, &gauss_sigma_x, &gauss_sigma_y),
         create_canny_reducer(&canny_threshold_1, &canny_threshold_2),
         create_dilate_reducer(&dilate_width, &dilate_height),

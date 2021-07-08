@@ -25,10 +25,10 @@ namespace aegis {
         return *this;
     }
 
-//    VideoSource& VideoSource::operator>>(Image& image) {
-//        read(image);
-//        return *this;
-//    }
+    CaptureSource& CaptureSource::operator>>(cv::UMat& matrix) {
+        read(matrix);
+        return *this;
+    }
 
     bool CaptureSource::read(OutputArray output) {
         return _capture.read(output);
@@ -114,10 +114,10 @@ namespace aegis {
         return *this;
     }
 
-//    Pipeline& Pipeline::operator>>(Image& image) {
-//        read(image);
-//        return *this;
-//    }
+    Pipeline& Pipeline::operator>>(cv::UMat& image) {
+        read(image);
+        return *this;
+    }
 
     bool Pipeline::read(OutputArray output) {
         Matrix _input, _output;

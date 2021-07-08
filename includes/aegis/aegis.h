@@ -16,13 +16,14 @@ namespace aegis {
     };
 
     typedef cv::Mat Matrix;
-    //typedef cv::UMat Image; Currently not working properly (deallocate causes exception
     typedef cv::InputArray InputArray;
     typedef cv::OutputArray OutputArray;
 
     class VideoSource {
     public:
         virtual VideoSource& operator>>(Matrix& matrix) = 0;
+
+        virtual VideoSource& operator>>(cv::UMat& matrix) = 0;
 
         virtual bool read(OutputArray output) = 0;
     };
@@ -38,7 +39,7 @@ namespace aegis {
 
         CaptureSource& operator>>(Matrix& matrix) override;
 
-        // VideoSource& operator>> (Image& image);
+        CaptureSource& operator>>(cv::UMat& matrix) override;
 
         bool read(OutputArray output) override;
     };
@@ -77,7 +78,7 @@ namespace aegis {
 
         Pipeline& operator>>(Matrix& matrix) override;
 
-        // Pipeline& operator>> (Image& image);
+        Pipeline& operator>>(cv::UMat& matrix) override;
 
         bool read(OutputArray output) override;
     };

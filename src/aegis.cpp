@@ -110,7 +110,7 @@ namespace aegis {
             for (auto i = 0; i < n; i++) {
                 _output.deallocate();
                 _reducers.at(i)(_input, _output);
-                if (i < n) {
+                if (i < n-1) {
                     _output.copyTo(_input);
                 }
             }

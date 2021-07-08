@@ -52,4 +52,6 @@ int main() {
 }
 ```
 
+LICENSE MIT
+
 Copyright 2021 Ole A. Sjo Fasting

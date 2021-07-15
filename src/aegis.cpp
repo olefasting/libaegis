@@ -107,14 +107,18 @@ namespace aegis {
         Matrix _input, _output;
         if (_source.read(_input)) {
             auto n = _reducers.size();
-            for (auto i = 0; i < n; i++) {
-                _output.deallocate();
-                _reducers.at(i)(_input, _output);
-                if (i < n-1) {
-                    _output.copyTo(_input);
+            if (n == 0) {
+                _input.copyTo(output);
+            } else {
+                for (auto i = 0; i < n; i++) {
+                    _output.deallocate();
+                    _reducers.at(i)(_input, _output);
+                    if (i < n - 1) {
+                        _output.copyTo(_input);
+                    }
                 }
+                _output.copyTo(output);
             }
-            _output.copyTo(output);
             return true;
         }
         return false;
